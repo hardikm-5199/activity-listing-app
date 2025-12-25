@@ -54,6 +54,7 @@ export default function ActivityListScreen() {
       IN_PROGRESS: true,
       COMPLETED: true,
     });
+    setMenuVisible(false);
   };
 
   return (

@@ -22,14 +22,17 @@ export default function ActivityCard({ activity }: Props) {
 
   return (
     <Card style={styles.card} mode="outlined">
-      <Card.Content>
+      <Card.Content style={{ paddingVertical: 12 }}>
         {/* Title */}
         <Text variant="titleMedium">{activity.title}</Text>
 
         {/* Type + Status */}
         <View style={styles.row}>
           <Chip compact>{activity.type}</Chip>
-          <Chip compact style={styles.statusChip}>
+          <Chip
+            compact
+            mode={activity.status === "IN_PROGRESS" ? "flat" : "outlined"}
+          >
             {activity.status.replace("_", " ")}
           </Chip>
         </View>
@@ -54,7 +57,11 @@ export default function ActivityCard({ activity }: Props) {
       </Card.Content>
 
       <Card.Actions>
-        <Button mode="contained">{getActionLabel()}</Button>
+        <Button
+          mode={activity.status === "COMPLETED" ? "outlined" : "contained"}
+        >
+          {getActionLabel()}
+        </Button>
       </Card.Actions>
     </Card>
   );

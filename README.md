@@ -1,57 +1,48 @@
-# Activity Listing App
-
-Cross-platform Activity Listing screen for an online learning platform.
-
-## Tech Stack
-
-- Expo (React Native)
-- React Native Paper
-- TypeScript
-- React Native Web
-
-## Features (In Progress)
-
-- Activity listing (Classes & Assessments)
-- Web + Native from same codebase
-- Typed data model
-
-## Getting Started
-
-### Run on Web
-
-````bash
-npm install
+Run on Mobile (Android / iOS)
 npm start
-# press w
-npm start
-# scan QR or run emulator
+
+# scan QR with Expo Go OR run emulator
+
+Project Structure
 src/
- ├── components/
- ├── screens/
- ├── data/
- ├── types/
+├── components/ # Reusable UI components
+├── screens/ # Screen-level components
+├── data/ # Mock activity data
+├── types/ # TypeScript models
+├── theme/ # Theme & theme context
 
-Save it.
+Testing
 
----
+Basic unit tests are included for core UI and business logic.
 
-## STEP 7: Commit README
+npm test
 
-```bash
-git add README.md
-git commit -m "docs: add initial README"
-git push
-````
+Tech Choices & Tradeoffs
 
-## Tech Choices & Tradeoffs
+Expo + React Native: enabled fast setup and a single codebase for both web and native platforms.
 
-- **Expo + React Native**: enabled a single codebase for web and native with minimal setup.
-- **React Native Paper**: chosen for consistent theming and cross-platform UI components.
-- **Local mock data**: used for simplicity; can be replaced with API integration.
-- **Client-side filtering**: sufficient for current dataset size; server-side filtering would be preferred at scale.
+React Native Paper: chosen for consistent theming, accessibility, and cross-platform UI components.
 
-## Limitations
+Local mock data: used to keep the assignment focused on UI/UX and architecture rather than backend integration.
 
-- No backend integration (mock data only).
-- Filters and theme preference are not persisted across app restarts.
-- No pagination or infinite scroll (data size assumed small).
+Client-side filtering: simple and performant for small datasets; server-side filtering would be preferred at scale.
+
+Limitations
+
+No backend/API integration (mock data only).
+
+Filters and theme preferences are not persisted across app restarts.
+
+No pagination or infinite scroll (dataset assumed small).
+
+Future Improvements
+
+Persist filters and theme using AsyncStorage.
+
+Integrate backend APIs with loading and error states.
+
+Add pagination / infinite scrolling for large datasets.
+
+Improve accessibility (screen reader labels, keyboard navigation).
+
+Add more unit and integration tests.
