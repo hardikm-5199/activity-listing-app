@@ -84,6 +84,7 @@ npm start
 #Press i to run on ios simulator and a to run on andorid simulator
 #Run on an emulator/simulator from the Expo DevTools
 #Download Expo Go on andorid and ios device and scan the QR code which comes after npm start and hot reload will be available on physical device.
+#please make sure to keep your mobile and laptop connected to the same wifi when running expo-go from the mobile otherwise it wont load.
 ```
 
 ### Project Structure
