@@ -4,6 +4,8 @@ import {
   SegmentedButtons,
   IconButton,
   useTheme,
+  Menu,
+  Checkbox,
 } from "react-native-paper";
 import { useMemo, useState } from "react";
 import ActivityCard from "../components/ActivityCard";
@@ -15,15 +17,35 @@ export default function ActivityListScreen() {
   const { mode, toggleTheme } = useThemeContext();
   const theme = useTheme();
 
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const [statusFilters, setStatusFilters] = useState({
+    NOT_STARTED: true,
+    IN_PROGRESS: true,
+    COMPLETED: true,
+  });
+
+  const toggleStatus = (
+    status: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED"
+  ) => {
+    setStatusFilters((prev) => ({
+      ...prev,
+      [status]: !prev[status],
+    }));
+  };
+
   const filteredActivities = useMemo(() => {
-    if (filter === "CLASS") {
-      return activities.filter((a) => a.type === "CLASS");
-    }
-    if (filter === "ASSESSMENT") {
-      return activities.filter((a) => a.type !== "CLASS");
-    }
-    return activities;
-  }, [filter]);
+    return activities.filter((activity) => {
+      // Type filter
+      if (filter === "CLASS" && activity.type !== "CLASS") return false;
+      if (filter === "ASSESSMENT" && activity.type === "CLASS") return false;
+
+      // Status filter
+      if (!statusFilters[activity.status]) return false;
+
+      return true;
+    });
+  }, [filter, statusFilters]);
 
   return (
     <View
@@ -34,13 +56,57 @@ export default function ActivityListScreen() {
         <Text variant="titleLarge" style={{ color: theme.colors.onBackground }}>
           My Activities
         </Text>
-        <IconButton
-          icon={mode === "dark" ? "weather-sunny" : "weather-night"}
-          onPress={toggleTheme}
-        />
+
+        <View style={{ flexDirection: "row" }}>
+          {/* Status Filter Menu */}
+          <Menu
+            visible={menuVisible}
+            onDismiss={() => setMenuVisible(false)}
+            anchor={
+              <IconButton
+                icon="filter-variant"
+                onPress={() => setMenuVisible(true)}
+              />
+            }
+          >
+            <Menu.Item
+              title="Not Started"
+              leadingIcon={() => (
+                <Checkbox
+                  status={statusFilters.NOT_STARTED ? "checked" : "unchecked"}
+                />
+              )}
+              onPress={() => toggleStatus("NOT_STARTED")}
+            />
+            <Menu.Item
+              title="In Progress"
+              leadingIcon={() => (
+                <Checkbox
+                  status={statusFilters.IN_PROGRESS ? "checked" : "unchecked"}
+                />
+              )}
+              onPress={() => toggleStatus("IN_PROGRESS")}
+            />
+            <Menu.Item
+              title="Completed"
+              leadingIcon={() => (
+                <Checkbox
+                  status={statusFilters.COMPLETED ? "checked" : "unchecked"}
+                />
+              )}
+              onPress={() => toggleStatus("COMPLETED")}
+            />
+          </Menu>
+
+          {/* Theme Toggle */}
+          <IconButton
+            icon={mode === "dark" ? "weather-sunny" : "weather-night"}
+            onPress={toggleTheme}
+          />
+        </View>
       </View>
 
-      {/* Filters */}
+      {/* Type Filters */}
       <SegmentedButtons
         value={filter}
         onValueChange={(value) =>
