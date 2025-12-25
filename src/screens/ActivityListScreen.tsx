@@ -6,6 +6,7 @@ import {
   useTheme,
   Menu,
   Checkbox,
+  Divider,
 } from "react-native-paper";
 import { useMemo, useState } from "react";
 import ActivityCard from "../components/ActivityCard";
@@ -46,6 +47,14 @@ export default function ActivityListScreen() {
       return true;
     });
   }, [filter, statusFilters]);
+  const clearFilters = () => {
+    setFilter("ALL");
+    setStatusFilters({
+      NOT_STARTED: true,
+      IN_PROGRESS: true,
+      COMPLETED: true,
+    });
+  };
 
   return (
     <View
@@ -96,6 +105,13 @@ export default function ActivityListScreen() {
               )}
               onPress={() => toggleStatus("COMPLETED")}
             />
+            <Divider />
+
+            <Menu.Item
+              title="Clear filters"
+              leadingIcon="filter-remove"
+              onPress={clearFilters}
+            />
           </Menu>
 
           {/* Theme Toggle */}
@@ -121,12 +137,35 @@ export default function ActivityListScreen() {
       />
 
       {/* Activity List */}
-      <FlatList
-        data={filteredActivities}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ActivityCard activity={item} />}
-        showsVerticalScrollIndicator={false}
-      />
+      {filteredActivities.length === 0 ? (
+        <View style={styles.emptyState}>
+          <IconButton
+            icon="playlist-remove"
+            size={48}
+            iconColor={theme.colors.onSurfaceVariant}
+          />
+          <Text
+            variant="titleMedium"
+            style={{ color: theme.colors.onBackground }}
+          >
+            No activities found
+          </Text>
+          <Text
+            variant="bodyMedium"
+            style={{ color: theme.colors.onSurfaceVariant, marginVertical: 8 }}
+          >
+            Try adjusting or clearing your filters
+          </Text>
+          <IconButton icon="filter-remove" onPress={clearFilters} />
+        </View>
+      ) : (
+        <FlatList
+          data={filteredActivities}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <ActivityCard activity={item} />}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 }
@@ -144,5 +183,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 12,
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 24,
   },
 });
